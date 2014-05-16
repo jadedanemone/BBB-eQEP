@@ -45,6 +45,7 @@ AC_CONFIG_FILES([
  src/Makefile
  examples/Makefile
  include/Makefile
+ dts/Makefile
 ])
 
 AC_OUTPUT
