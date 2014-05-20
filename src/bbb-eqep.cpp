@@ -5,7 +5,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#include "eqep.h"
+#include "../include/bbb-eqep.h"
 
 eQEP::eQEP(int eQEP_address):
 eQEP_address_(eQEP_address)

@@ -3,6 +3,14 @@
  * Contains all of the method declarations for class eQEP.
 **/
 
+#ifndef BBB_EQEP_H
+#define BBB_EQEP_H
+
+#include <sys/mman.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #define EQEP_QPOSCNT	0x00
 #define EQEP_QPOSINIT	0x04
 #define EQEP_QPOSMAX	0x08
@@ -95,7 +103,11 @@ private:
   volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
   
   void map_pwm_register();
-		
+  void setHelper(int offset, int32_t value);
+  void setHelper(int offset, int16_t value);
+  int32_t getHelper(int offset);
+  int16_t getHelper(int offset);
+	
 public:
   eQEP(int eQEP_address);
   ~eQEP();
@@ -107,7 +119,7 @@ public:
    * count value is proportional to position from a give reference point.
   **/
   uint32_t getPosition();
-  uint32_t operator=();
+  operator uint32_t();
   /**
    *  This 32-bit position counter register counts up/down on every eQEP pulse
    * based on direction input. This counter acts as a position integrator whose
@@ -272,13 +284,13 @@ public:
    * @see enableSyncOutput();
   **/
   enum SOPin {
-    Index = 0,
-    Strobe = 1
+    Index = 0, ///< Use the index pin for sync output.
+    Strobe = 1 ///< Use the strobe pin for sync output.
   };
   /**
    * Enable position-compare sync output.
    * 
-   * /param pin Defines the pins to sync output. INDEX or STROBE.
+   * /param pin Defines the pins to sync output. Index or Strobe.
   **/
   void enableSyncOutput(SOPin pin);
   /**
@@ -320,14 +332,38 @@ public:
   void invertStrobe();
   
   // eQEP Control Register
+  /**
+   * get eQEP Control Register
+  **/
   uint16_t getControl();
+  /**
+   * set eQEP Control Register
+  **/
   void setControl(uint16_t);
   
+  /**
+   * Emulation control enum. Effects eQEP behavior through emulation suspensions
+   * such as debugging.
+   *
+   * @see setEmulationControl()
+  **/
   enum ECB {
-    StopImmediately = 0, ///<
-    WaitForRollover = 1, ///<
-    NoStop = 2 ///<
-  }
+    /**
+     * Counters and timers will stop immediately on emulation suspend
+    **/
+    StopImmediately = 0,
+    /**
+     * Counters and timers will wait for the next event on emulation suspend
+    **/
+    WaitForRollover = 1,
+    /**
+     * Counters and timers will continue through emulation suspend
+    **/
+    NoStop = 2
+  };
+  /**
+   * Set the Emulation Control bits.
+  **/
   void setEmulationControl(ECB mode);
   /**
    * Position Counter Reset Mode enum.
@@ -354,18 +390,18 @@ public:
     /**
      * Does nothing (action disabled)
     **/
-    Disabled = 0,
+    SEIDisabled = 0,
     /**
      * Initializes the position counter on rising edge of QEPS signal.
     **/
-    RisingEdge = 2,
+    SEIRisingEdge = 2,
     /**
      * Clockwise Direction: Initializes the position counter on the rising
      * edge of QEPS strobe
      * Counter Clockwise Direction: Initializes the position counter on the
      * falling edge of QEPS strobe
     **/
-    ConditionalEdge = 3
+    SEIConditionalEdge = 3
   };
   /**
    * Sets when a strobe event should initialize the position counter
@@ -378,17 +414,17 @@ public:
     /**
      * Does nothing (action disabled)
     **/
-    Disabled = 0,
+    IEIDisabled = 0,
     /**
      * Initializes the position counter on the rising edge of the QEPI signal
      * (QPOSCNT = QPOSINIT)
     **/
-    RisingEdge = 2,
+    IEIRisingEdge = 2,
     /**
      * Initializes the position counter on the falling edge of QEPI signal
      * (QPOSCNT = QPOSINIT)
     **/
-    FallingEdge = 3
+    IEIFallingEdge = 3
   };
   /**
    * Sets when an index event should initialize the position counter
@@ -411,14 +447,14 @@ public:
      *
      * @see invertStrobe()
     **/
-    RisingEdge = 0,
+    SELRisingEdge = 0,
     /**
      * Clockwise Direction: Position counter is latched on rising edge of
      * QEPS strobe
      * Counter Clockwise Direction: Position counter is latched on falling edge
      * of QEPS strobe
     **/
-    Conditional = 1,
+    SELConditional = 1,
   };
   /**
    * Set which strobe event should latch the position counter
@@ -431,18 +467,18 @@ public:
     /**
      * Latches position counter on rising edge of the index signal
     **/
-    RisingEdge = 1,
+    IELRisingEdge = 1,
     /**
      * Latches position counter on falling edge of the index signal
     **/
-    FallingEdge = 2,
+    IELFallingEdge = 2,
     /**
      * Software index marker. Latches the position counter and quadrature
      * direction flag on index event marker. The position counter is latched to
      * the QPOSILAT register and the direction flag is latched in the
      * QEPSTS[QDLF] bit. This mode is useful for software index marking.
     **/
-    Software = 3,
+    IELSoftware = 3,
   };
   /**
    * Set which index event should latch the position counter
@@ -452,6 +488,9 @@ public:
    * Quadrature position counter enable/software reset
    * Reset the eQEP peripheral internal operating flags/read-only registers.
    * Control/configuration registers are not disturbed by a software reset.
+   * should be followed by a call to enableeQEP()
+   *
+   * @see enableeQEP()
   **/
   void reseteQEP();
   /**
@@ -459,34 +498,167 @@ public:
    * @see reseteQEP()
   **/
   void enableeQEP();
-  3
-  PHEN
-  0 1
-  Quadrature position counter enable/software reset
-  Reset the eQEP peripheral internal operating flags/read-only registers. Control/configuration registers are not disturbed by a software reset.
-  eQEP position counter is enabled
-  2
-  QCLM
-  0 1
-  eQEP capture latch mode
-  Latch on position counter read by CPU. Capture timer and capture period values are latched into QCTMRLAT and QCPRDLAT registers when CPU reads the QPOSCNT register.
-  Latch on unit time out. Position counter, capture timer and capture period values are latched into QPOSLAT, QCTMRLAT and QCPRDLAT registers on unit time out.
-  1
-  UTE
-  0 1
-  eQEP unit timer enable Disable eQEP unit timer Enable unit timer
-  0
-  WDE
-  0 1
-  eQEP watchdog enable
-  Disable the eQEP watchdog timer Enable the eQEP watchdog timer
+  /**
+   * eQEP capture latch modes enum
+  **/
+  enum CLM {
+    /**
+     * Latch on position counter read by CPU. Capture timer and capture period
+     * values are latched into QCTMRLAT and QCPRDLAT registers when CPU reads
+     * the QPOSCNT register.
+    **/
+    CLMCPU = 0,
+    /**
+     * Latch on unit time out. Position counter, capture timer and capture
+     * period values are latched into QPOSLAT, QCTMRLAT and QCPRDLAT registers
+     * on unit time out. Unit timer must be enabled.
+     *
+     * @see enableUnitTimer()
+    **/
+    CLMUnitTime = 1
+  };
+  /**
+   * eQEP capture latch mode
+  **/
+  void setCaptureLatchMode(CLM mode);
+  /**
+   * Enables the unit timer
+  **/
+  void enableUnitTimer();
+  /**
+   * Disables the unit timer
+  **/
+  void disableUnitTimer();
+  /**
+   * Enables the watchdog timer
+  **/
+  void enableWatchdogTimer();
+  /**
+   * Disables the watchdog timer
+  **/
+  void disableWatchdogTimer();
+
   // eQEP Capture Control Register
+  /**
+   * Get Capture Control register value.
+  **/
   uint16_t getCaptureControl();
+  /**
+   * Set Capture Control register value.
+   *
+   * /warning The QCAPCTL register should not be modified dynamically (such as
+   * switching CAPCLK prescaling mode from QCLK/4 to QCLK/8). The capture unit
+   * must be disabled before changing the prescaler. @see disableCaptureUnit()
+  **/
   void setCaptureControl(uint16_t);
+  /**
+   * Disable eQEP Capture Unit
+  **/
+  void disableCaptureUnit();
+  /**
+   * Enable eQEP Capture Unit
+  **/
+  void enableCaptureUnit();
+  /**
+   * Capture timer clock prescaler.
+   *
+   * /param value The prescaler factor used in equation CAPCLK=SYSCLKOUT/2^value.
+   * Should be between 0h and 7h.
+   *
+   * /warning The QCAPCTL register should not be modified dynamically (such as
+   * switching CAPCLK prescaling mode from QCLK/4 to QCLK/8). The capture unit
+   * must be disabled before changing the prescaler. @see disableCaptureUnit()
+  **/
+  void setCaptureTimeClockPrescaler(int value);
+  /**
+   * Unit position event prescaler.
+   *
+   * /param value The prescaler factor used in equation UPEVNT=QCLK/2^value.
+   * Should be between 0h and Bh
+   *
+   * /warning The QCAPCTL register should not be modified dynamically (such as
+   * switching CAPCLK prescaling mode from QCLK/4 to QCLK/8). The capture unit
+   * must be disabled before changing the prescaler. @see disableCaptureUnit()
+  **/
+  void setPositionEventPrescaler(int value);
   
   // eQEP Position-Compare Control Register
+  /**
+   * Get Position Compare Control register value.
+   * The eQEP peripheral includes a position-compare unit that is used to
+   * generate a sync output and/or interrupt on a position-compare match.
+   * The position-compare (QPOSCMP) register is shadowed and shadow mode can be
+   * enabled or disabled using enablePositionCompareShadow() and
+   * disablePositionCompareShadow() (the QPOSCTL[PSSHDW] bit). If the shadow
+   * mode is not enabled, the CPU writes directly to the active position compare
+   * register.
+   *
+   * In shadow mode, you can configure the position-compare unit
+   * (QPOSCTL[PCLOAD]) to load the shadow register value into the active
+   * register on the following events and to generate the position-compare
+   * ready (QFLG[PCR]) interrupt after loading.
+   * * Load on compare match
+   * * Load on position-counter zero event
+   *
+   * The position-compare match (QFLG[PCM]) is set when the position-counter
+   * value (QPOSCNT) matches with the active position-compare register
+   * (QPOSCMP) and the position-compare sync output of the programmable pulse
+   * width is generated on compare match to trigger an external device.
+  **/
   uint16_t getPositionCompareControl();
+  /**
+   * Set Position Compare Control register value.
+  **/
   void setPositionCompareControl(uint16_t);
+  /**
+   * Disable Position Compare Shadow. Load Immediate
+  **/
+  void disablePositionCompareShadow();
+  /**
+   * Enable Position Compare Shadow
+  **/
+  void enablePositionCompareShadow();
+  /**
+   * 
+  **/
+  enum PCLOAD { 
+    PCLOADCountEq0 = 0,
+    PCLOADCountEqPosCmp = 1
+  };
+  /**
+   * Position-compare shadow load mode
+  **/
+  void positionCompareShadowLoadMode(PCLOAD mode);
+  enum PCPOL { 
+    PCPOLActiveHigh = 0,
+    PCPOLActiveLow = 1
+  };
+  /**
+   * Polarity of sync output
+  **/
+  void setPositionCompareSyncOutput(PCPOL mode);
+  /**
+   * Enable the Position Compare Unit
+  **/
+  void enablePositionCompareUnit();
+  /**
+   * Disable the Position Compare Unit
+  **/
+  void disablePositionCompareUnit();
+  /**
+   * Select-position-compare sync output pulse width.
+   *
+   * /param value The prescaler factor used in equation 
+  (value+1) * 4 * SYSCLKOUT cycles.
+   * Should be between 0h and FFFh.
+  **/
+  11-0
+  PCSPW
+  0-FFFh 0
+  1h 2h-FFFh
+  1 × 4 × SYSCLKOUT cycles
+  2 × 4 × SYSCLKOUT cycles
+  3 × 4 × SYSCLKOUT cycles to 4096 × 4 × SYSCLKOUT cycles
   
   // eQEP Interrupt Enable Register
   uint16_t getInterruptEnable();
@@ -626,3 +798,5 @@ public:
 //#define EQEP_REVID	0x5c
   
 };
+
+#endif /* end of include guard: BBB_EQEP_H */
