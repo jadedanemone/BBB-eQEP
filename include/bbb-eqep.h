@@ -169,6 +169,7 @@ public:
    * 
    * @see getPosition()
    * @see setPosition()
+   * @see setPositionCompareControl()
   **/
   void setPositionCompare(uint32_t);
   
@@ -619,18 +620,37 @@ public:
   **/
   void enablePositionCompareShadow();
   /**
-   * 
+   * Position Compare shadow load mode selection enum
   **/
-  enum PCLOAD { 
+  enum PCLOAD {
+    /**
+     * Load on Position == 0
+    **/
     PCLOADCountEq0 = 0,
+    /**
+     * Load on Position == Position Compare register
+     *
+     * @see setPositionCompare()
+    **/
     PCLOADCountEqPosCmp = 1
   };
   /**
-   * Position-compare shadow load mode
+   * Set position-compare shadow load mode
   **/
-  void positionCompareShadowLoadMode(PCLOAD mode);
-  enum PCPOL { 
+  void setPositionCompareShadowLoadMode(PCLOAD mode);
+  /**
+   * Polarity of sync output enum
+   *
+   * @see setPositionCompareSyncOutput()
+  **/
+  enum PCPOL {
+    /**
+     * Active high
+    **/
     PCPOLActiveHigh = 0,
+    /**
+     * Active low
+    **/
     PCPOLActiveLow = 1
   };
   /**
@@ -652,28 +672,283 @@ public:
   (value+1) * 4 * SYSCLKOUT cycles.
    * Should be between 0h and FFFh.
   **/
-  11-0
-  PCSPW
-  0-FFFh 0
-  1h 2h-FFFh
-  1 × 4 × SYSCLKOUT cycles
-  2 × 4 × SYSCLKOUT cycles
-  3 × 4 × SYSCLKOUT cycles to 4096 × 4 × SYSCLKOUT cycles
+  void setPositionCompareSyncOutputPulseWidth(uint16_t);
   
   // eQEP Interrupt Enable Register
+  /**
+   * Get the current status of the interrupt enable bits
+  **/
   uint16_t getInterruptEnable();
+  /**
+   * Turn on interrupts by passing the correct bits
+  **/
   void setInterruptEnable(uint16_t);
+  /**
+   * Enable Unit Timeout Interrupt
+  **/
+  void enableUnitTimeoutInterrupt();
+  /**
+   * Disable Unit Timeout Interrupt
+  **/
+  void disableUnitTimeoutInterrupt();
+  /**
+   * Enable Index Event Latch Interrupt
+  **/
+  void enableIndexEventLatchInterrupt();
+  /**
+   * Disable Index Event Latch Interrupt
+  **/
+  void disableIndexEventLatchInterrupt();
+  /**
+   * Enable Strobe Event Latch Interrupt
+  **/
+  void enableStrobeEventLatchInterrupt();
+  /**
+   * Disable Strobe Event Latch Interrupt
+  **/
+  void disableStrobeEventLatchInterrupt();
+  /**
+   * Enable Position Compare Match Interrupt
+  **/
+  void enablePositionCompareMatchInterrupt();
+  /**
+   * Disable Position Compare Match Interrupt
+  **/
+  void disablePositionCompareMatchInterrupt();
+  /**
+   * Enable Position Compare Ready Interrupt
+  **/
+  void enablePositionCompareReadyInterrupt();
+  /**
+   * Disable Position Compare Ready Interrupt
+  **/
+  void disablePositionCompareReadyInterrupt();
+  /**
+   * Enable Position Counter Overflow Interrupt
+  **/
+  void enablePositionCounterOverflowInterrupt();
+  /**
+   * Disable Position Counter Overflow Interrupt
+  **/
+  void disablePositionCounterOverflowInterrupt();
+  /**
+   * Enable Position Counter Underflow Interrupt
+  **/
+  void enablePositionCounterUnderflowInterrupt();
+  /**
+   * Disable Position Counter Underflow Interrupt
+  **/
+  void disablePositionCounterUnderflowInterrupt();
+  /**
+   * Enable Watchdog Time Out Interrupt
+  **/
+  void enableWatchdogTimeOutInterrupt();
+  /**
+   * Disable Watchdog Time Out Interrupt
+  **/
+  void disableWatchdogTimeOutInterrupt();
+  /**
+   * Enable Quadrature Direction Change Interrupt
+  **/
+  void enableQuadratureDirectionChangeInterrupt();
+  /**
+   * Disable Quadrature Direction Change Interrupt
+  **/
+  void disableQuadratureDirectionChangeInterrupt();
+  /**
+   * Enable Quadrature Phase Error Interrupt
+  **/
+  void enableQuadraturePhaseErrorInterrupt();
+  /**
+   * Disable Unit Timeout Interrupt
+  **/
+  void disableQuadraturePhaseErrorInterrupt();
+  /**
+   * Enable Position Counter Error Interrupt
+  **/
+  void enablePositionCounterErrorInterrupt();
+  /**
+   * Disable Position Counter Error Interrupt
+  **/
+  void disablePositionCounterErrorInterrupt();
   
   // eQEP Interrupt Flag Register
   uint16_t getInterruptFlag();
+  /**
+   * Unit Time Out Interrupt flag.
+   *
+   * \return Set by eQEP unit timer period match.
+  **/
+  bool getUnitTimeoutInterruptFlag();
+  /**
+   * Index Event Latch Interrupt flag.
+   *
+   * \return True after latching the QPOSCNT to QPOSILAT.
+  **/
+  bool getIndexEventLatchInterruptFlag();
+  /**
+   * Strobe Event Latch Interrupt flag.
+   *
+   * \return True after latching the QPOSCNT to QPASSLAT.
+  **/
+  bool getStrobeEventLatchInterruptFlag();
+  /**
+   * Position Compare Match Interrupt flag.
+   *
+   * \return True after position compare match.
+  **/
+  bool getPositionCompareMatchInterruptFlag();
+  /**
+   * Position Compare Ready Interrupt flag.
+   *
+   * \return True after transferring the shadow register value to the active
+   *         position compare register.
+  **/
+  bool getPositionCompareReadyInterruptFlag();
+  /**
+   * Position Counter Overflow Interrupt flag.
+   *
+   * \return True after position counter overflow.
+  **/
+  bool getPositionCounterOverflowInterruptFlag();
+  /**
+   * Position Counter Underflow Interrupt flag.
+   *
+   * \return True after position counter underflow.
+  **/
+  bool getPositionCounterUnderflowInterruptFlag();
+  /**
+   * Watchdog Time Out Interrupt flag.
+   *
+   * \return True after watch dog timeout.
+  **/
+  bool getWatchdogTimeOutInterruptFlag();
+  /**
+   * Quadrature Direction Change Interrupt flag.
+   *
+   * \return True after change in direction.
+  **/
+  bool getQuadratureDirectionChangeInterruptFlag();
+  /**
+   * Quadrature Phase Error Interrupt flag.
+   *
+   * \return True on simultaneous transition of QEPA and QEPB.
+  **/
+  bool getQuadraturePhaseErrorInterruptFlag();
+  /**
+   * Position Counter Error Interrupt Flag.
+   *
+   * \return True on position counter error.
+  **/
+  bool getPositionCounterErrorInterruptFlag();
+  /**
+   * Global Interrupt Status Flag
+   *
+   * \return True when an interrupt has been generated.
+  **/
+  bool getGlobalInterruptStatusFlag();
   
   // eQEP Interrupt Clear Register
   uint16_t getInterruptClear();
   void setInterruptClear(uint16_t);
+  void clearInterrupts();
+  /**
+   * Clear the Unit Time Out Interrupt flag.
+  **/
+  void clearUnitTimeoutInterruptFlag();
+  /**
+   * Clear the Index Event Latch Interrupt
+  **/
+  void clearIndexEventLatchInterruptFlag();
+  /**
+   * Clear the Strobe Event Latch Interrupt
+  **/
+  void clearStrobeEventLatchInterruptFlag();
+  /**
+   * Clear the Position Compare Match Interrupt
+  **/
+  void clearPositionCompareMatchInterruptFlag();
+  /**
+   * Clear the Position Compare Ready Interrupt
+  **/
+  void clearPositionCompareReadyInterruptFlag();
+  /**
+   * Clear the Position Counter Overflow Interrupt
+  **/
+  void clearPositionCounterOverflowInterruptFlag();
+  /**
+   * Clear the Position Counter Underflow Interrupt
+  **/
+  void clearPositionCounterUnderflowInterruptFlag();
+  /**
+   * Clear the Watchdog Time Out Interrupt
+  **/
+  void clearWatchdogTimeOutInterruptFlag();
+  /**
+   * Clear the Quadrature Direction Change Interrupt
+  **/
+  void clearQuadratureDirectionChangeInterruptFlag();
+  /**
+   * Clear the Quadrature Phase Error Interrupt
+  **/
+  void clearQuadraturePhaseErrorInterruptFlag();
+  /**
+   * Clear the Position Counter Error Interrupt Flag
+  **/
+  void clearPositionCounterErrorInterruptFlag();
+  /**
+   * Clear the Global Interrupt Status Flag. Clears the interrupt flag and
+   * enables further interrupts to be generated if an event flags is set to 1.
+  **/
+  void clearGlobalInterruptStatusFlag();
   
   // eQEP Interrupt Force Register
   uint16_t getInterruptForce();
   void setInterruptForce(uint16_t);
+  /**
+   * Force the Unit Time Out Interrupt flag.
+  **/
+  void forceUnitTimeoutInterruptFlag();
+  /**
+   * Force the Index Event Latch Interrupt
+  **/
+  void forceIndexEventLatchInterruptFlag();
+  /**
+   * Force the Strobe Event Latch Interrupt
+  **/
+  void forceStrobeEventLatchInterruptFlag();
+  /**
+   * Force the Position Compare Match Interrupt
+  **/
+  void forcePositionCompareMatchInterruptFlag();
+  /**
+   * Force the Position Compare Ready Interrupt
+  **/
+  void forcePositionCompareReadyInterruptFlag();
+  /**
+   * Force the Position Counter Overflow Interrupt
+  **/
+  void forcePositionCounterOverflowInterruptFlag();
+  /**
+   * Force the Position Counter Underflow Interrupt
+  **/
+  void forcePositionCounterUnderflowInterruptFlag();
+  /**
+   * Force the Watchdog Time Out Interrupt
+  **/
+  void forceWatchdogTimeOutInterruptFlag();
+  /**
+   * Force the Quadrature Direction Change Interrupt
+  **/
+  void forceQuadratureDirectionChangeInterruptFlag();
+  /**
+   * Force the Quadrature Phase Error Interrupt
+  **/
+  void forceQuadraturePhaseErrorInterruptFlag();
+  /**
+   * Force the Position Counter Error Interrupt Flag
+  **/
+  void forcePositionCounterErrorInterruptFlag();
   
   // eQEP Status Register
   uint16_t getStatus();
