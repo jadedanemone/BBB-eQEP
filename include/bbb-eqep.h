@@ -81,6 +81,10 @@
 #define EQEP_QCTMRLAT	0x3e
 #define EQEP_QCPRDLAT	0x40
 #define EQEP_REVID	0x5c
+        
+#define eQEP0 0x48300180
+#define eQEP1 0x48302180
+#define eQEP2 0x48304180
 
 #define EQEP_INPUT_DEV_PHYS_SIZE	32
 
@@ -103,13 +107,26 @@ private:
   volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
   
   void map_pwm_register();
+  /////////////////////
+  /* New Functions!! */
+  /////////////////////
   void setHelper(int offset, int32_t value);
   void setHelper(int offset, int16_t value);
   int32_t getHelper(int offset);
   int16_t getHelper(int offset);
 	
 public:
+  /**
+   * Constructor. Pass the eQEP address.
+   *
+   * @see eQEP0
+   * @see eQEP1
+   * @see eQEP2
+  **/
   eQEP(int eQEP_address);
+  /**
+   * Destructor
+  **/
   ~eQEP();
   
   // eQEP Position Counter Register
@@ -119,6 +136,11 @@ public:
    * count value is proportional to position from a give reference point.
   **/
   uint32_t getPosition();
+  /**
+   * Operator to use the instance itself instead of getPosition()
+   *
+   * @see getPosition();
+  **/
   operator uint32_t();
   /**
    *  This 32-bit position counter register counts up/down on every eQEP pulse
@@ -126,6 +148,11 @@ public:
    * count value is proportional to position from a give reference point.
   **/
   void setPosition(uint32_t position);
+  /**
+   * Operator to use the instance itself instead of setPosition()
+   *
+   * @see setPosition();
+  **/
   void operator=(uint32_t position);
   
   // eQEP Position Counter Initialization Register 
@@ -266,7 +293,7 @@ public:
   
   /**
    * Position-Counter source selection.
-  *
+   *
    * /param source Select from:
    * 0: Quadrature count mode
    * 1: Direction count mode
@@ -669,7 +696,7 @@ public:
    * Select-position-compare sync output pulse width.
    *
    * /param value The prescaler factor used in equation 
-  (value+1) * 4 * SYSCLKOUT cycles.
+   * (value+1) * 4 * SYSCLKOUT cycles.
    * Should be between 0h and FFFh.
   **/
   void setPositionCompareSyncOutputPulseWidth(uint16_t);
@@ -773,6 +800,9 @@ public:
   void disablePositionCounterErrorInterrupt();
   
   // eQEP Interrupt Flag Register
+  /**
+   * Get the status of all of the interrupt flags.
+  **/
   uint16_t getInterruptFlag();
   /**
    * Unit Time Out Interrupt flag.
@@ -849,8 +879,19 @@ public:
   bool getGlobalInterruptStatusFlag();
   
   // eQEP Interrupt Clear Register
+  /**
+   * Get the interrupts to be cleared. Not very useful.
+  **/
   uint16_t getInterruptClear();
+  /**
+   * Clear triggered interrupts
+   *
+   * \param Set bits indicating the interrupts to clear
+  **/
   void setInterruptClear(uint16_t);
+  /**
+   * Clear all of the interrupts
+  **/
   void clearInterrupts();
   /**
    * Clear the Unit Time Out Interrupt flag.
@@ -903,7 +944,13 @@ public:
   void clearGlobalInterruptStatusFlag();
   
   // eQEP Interrupt Force Register
+  /**
+   * Read forced interrupts. Not much value here.
+  **/
   uint16_t getInterruptForce();
+  /**
+   * Force interrupts to be triggered.
+  **/
   void setInterruptForce(uint16_t);
   /**
    * Force the Unit Time Out Interrupt flag.
@@ -951,16 +998,102 @@ public:
   void forcePositionCounterErrorInterruptFlag();
   
   // eQEP Status Register
+  /**
+   * Get the status of the eQEP functions.
+  **/
   uint16_t getStatus();
+  /**
+   * Set the status of the eQEP functions. Only some bits may be set.
+  **/
   void setStatus(uint16_t);
+  /**
+   * Unit position event flag
+   *
+   * \return False on no unit position event detected.
+   *         True on unit position event detected.
+  **/
+  bool getUnitPositionEventFlag();
+  /**
+   * Clear the Unit Position Event Flag.
+  **/
+  void clearUnitPositionEventFlag();
+  /**
+   * Direction on the first index marker. Status of the direction is latched on
+   * the first index event marker.
+   *
+   * \return false for Counter-clockwise rotation (or reverse movement) on the
+   *           first index event
+   *         true Clockwise rotation (or forward movement) on the first index
+   *           event
+  **/
+  bool getFirstIndexDirection();
+  /**
+   * Quadrature direction flag
+   *
+   * \return false for Counter-clockwise rotation (or reverse movement)
+   *         true for Clockwise rotation (or forward movement)
+  **/
+  bool getQuadratureDirection();
+  /**
+   * eQEP direction latch flag. Status of direction is latched on every index
+   * event marker.
+   *
+   * \return false for Counter-clockwise rotation (or reverse movement)
+   *         true for Clockwise rotation (or forward movement)
+  **/
+  bool getQuadratureDirectionLatch();
+  /**
+   * Capture overflow error flag. Sticky bit, cleared by calling
+   * clearCaptureOverflowErrorFlag().
+   *
+   * \return true for Overflow occurred in eQEP Capture timer
+  **/
+  bool getCaptureOverflowErrorFlag();
+  /**
+   * Clear the capture overflow error flag.
+  **/
+  void clearCaptureOverflowErrorFlag();
+  /**
+   * Capture direction error flag. Sticky bit, cleared by calling
+   * clearCaptureDirectionErrorFlag().
+   *
+   * \return true for Direction change occurred between the capture position
+   *         event.
+  **/
+  bool getCaptureDirectionErrorFlag();
+  /**
+   * Clear the Capture Direction Error Flag.
+  **/
+  void clearCaptureDirectionErrorFlag();
+  /**
+   * First index marker flag. Sticky bit, cleared by calling
+   * clearFirstIndexMarkerFlag(). Set by first occurrence of index pulse
+  **/
+  bool getFirstIndexMarkerFlag();
+  /**
+   * Clear the first index marker flag allowing it to flip on next index event.
+  **/
+  void clearFirstIndexMarkerFlag();
+  /**
+   * Position counter error flag. This bit is not sticky and it is updated for
+   * every index event.
+   *
+   * \return false No error occurred during the last index transition.
+   *         true Position counter error.
+  **/
+  bool getPositionCounterErrorFlag();
   
   // eQEP Capture Timer Register
   /**
    * This register provides time base for edge capture unit.
   **/
-  uint16_t getCatureTimer();
+  uint16_t getCaptureTimer();
   /**
    * This register provides time base for edge capture unit.
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   void setCaptureTimer(uint16_t);
   
@@ -968,30 +1101,48 @@ public:
   /**
    * This register holds the period count value between the last successive
    * eQEP position events
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   uint16_t getCapturePeriod();
   /**
    * This register holds the period count value between the last successive
    * eQEP position events
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   void setCapturePeriod(uint16_t);
-  
   // eQEP Capture Timer Latch Register
   /**
    * The eQEP capture timer value can be latched into this register on two
    * events viz., unit timeout event, reading the eQEP position counter.
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   uint16_t getCaptureTimerLatch();
-  
   // eQEP Capture Period Latch Register
   /**
    * eQEP capture period value can be latched into this register on two events
    * viz., unit timeout event, reading the eQEP position counter.
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   uint16_t getCapturePeriodLatch();
   /**
    * eQEP capture period value can be latched into this register on two events
    * viz., unit timeout event, reading the eQEP position counter.
+   *
+   * @see setCaptureLatchMode()
+   * @see setCaptureTimeClockPrescaler()
+   * @see enableCaptureUnit()
   **/
   void setCapturePeriodLatch(uint16_t);
   
