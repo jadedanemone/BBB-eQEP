@@ -5,6 +5,6 @@ AM_CPPFLAGS=-I${top_srcdir}/include/
 AM_LDFLAGS=-L../src
 LDADD = ../src/libbbb-eqep.a
 
-noinst_PROGRAMS = test
+#noinst_PROGRAMS = test
 
-test_SOURCES = test.cpp
+#test_SOURCES = test.cpp
