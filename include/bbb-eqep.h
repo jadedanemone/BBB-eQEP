@@ -34,6 +34,7 @@
 #define		EQEP_QDECCTL_QIP	(1 << 6)
 #define		EQEP_QDECCTL_QSP	(1 << 5)
 #define EQEP_QEPCTL	0x2a
+#define		EQEP_QEPCTL_ECB(x)	(((x) & 0x3) << 14)
 #define		EQEP_QEPCTL_PCRM(x)	(((x) & 0x3) << 12)
 #define		EQEP_QEPCTL_SEI(x)	(((x) & 0x3) << 10)
 #define		EQEP_QEPCTL_IEI(x)	(((x) & 0x3) << 8)
@@ -45,7 +46,15 @@
 #define		EQEP_QEPCTL_UTE		(1 << 1)
 #define		EQEP_QEPCTL_WDE		(1 << 0)
 #define EQEP_QCAPCTL	0x2c
+#define   EQEP_QCAPCTL_CEN  (1 << 15)
+#define   EQEP_QCAPCTL_CCPS(x) (((x) & 0x7) << 4)
+#define   EQEP_QCAPCTL_UPPS(x)  ((x) & 0xF)
 #define EQEP_QPOSCTL	0x2e
+#define  EQEP_QPOSCTL_PCSHDW (1 << 15)
+#define  EQEP_QPOSCTL_PCLOAD (1 << 14)
+#define  EQEP_QPOSCTL_PCPOL  (1 << 13)
+#define  EQEP_QPOSCTL_PCE    (1 << 12)
+#define  EQEP_QPOSCTL_PCSPW(x) ((x) & 0xFFF)
 #define EQEP_QEINT	0x30
 #define EQEP_QFLG	0x32
 #define EQEP_QCLR	0x34
@@ -87,6 +96,9 @@
 #define eQEP2 0x48304180
 
 #define EQEP_INPUT_DEV_PHYS_SIZE	32
+#define eQEP_BLOCK_LENGTH  0x7F
+#define eQEP_POS_LENGTH    0x04
+#define PWM_BLOCK_LENGTH   0x25F
 
 /** Beaglebone Black eQEP control and access class
  * This class allows for easy setup of all of the TI Sitara's eQEP registers.
@@ -101,7 +113,7 @@ private:
   
   bool active; /**< Set to true when the eQEP memory is properly mapped and available */
   
-  void *pwm_addr; /**< Pointer to the parent PWM memory section */
+  uint8_t *pwm_addr; /**< Pointer to the parent PWM memory section */
   volatile uint32_t *position_p; /**< Direct register access pointer */
   volatile uint32_t *pos_init_p; /**< Direct register access pointer */
   volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
@@ -110,10 +122,10 @@ private:
   /////////////////////
   /* New Functions!! */
   /////////////////////
-  void setHelper(int offset, int32_t value);
-  void setHelper(int offset, int16_t value);
-  int32_t getHelper(int offset);
-  int16_t getHelper(int offset);
+  void setHelper(int offset, uint32_t value);
+  void setHelper(int offset, uint16_t value);
+  uint32_t getHelper32(int offset);
+  uint16_t getHelper16(int offset);
 	
 public:
   /**
@@ -1150,79 +1162,7 @@ public:
   /**
    * eQEP revision ID
   **/
-  uint32_t getRevisionID();
-
-//#define EQEP_QPOSCNT	0x00
-//#define EQEP_QPOSINIT	0x04
-//#define EQEP_QPOSMAX	0x08
-//#define EQEP_QPOSCMP	0x0c
-//#define EQEP_QPOSILAT	0x10
-//#define EQEP_QPOSSLAT	0x14
-//#define EQEP_QPOSLAT	0x18
-//#define EQEP_QUTMR	0x1c
-//#define EQEP_QUPRD	0x20
-//#define EQEP_QWDTMR	0x24
-//#define EQEP_QWDPRD	0x26
-//#define EQEP_QDECCTL	0x28
-//#define		EQEP_QDECCTL_QSRC(x)	(((x) & 0x3) << 14)
-//#define		EQEP_QDECCTL_SOEN	(1 << 13)
-//#define		EQEP_QDECCTL_SPSEL	(1 << 12)
-//#define		EQEP_QDECCTL_XCR	(1 << 11)
-//#define		EQEP_QDECCTL_SWAP	(1 << 10)
-//#define		EQEP_QDECCTL_IGATE	(1 << 9)
-//#define		EQEP_QDECCTL_QAP	(1 << 8)
-//#define		EQEP_QDECCTL_QBP	(1 << 7)
-//#define		EQEP_QDECCTL_QIP	(1 << 6)
-//#define		EQEP_QDECCTL_QSP	(1 << 5)
-//#define EQEP_QEPCTL	0x2a
-//#define		EQEP_QEPCTL_PCRM(x)	(((x) & 0x3) << 12)
-//#define		EQEP_QEPCTL_SEI(x)	(((x) & 0x3) << 10)
-//#define		EQEP_QEPCTL_IEI(x)	(((x) & 0x3) << 8)
-//#define		EQEP_QEPCTL_SWI		(1 << 7)
-//#define		EQEP_QEPCTL_SEL		(1 << 6)
-//#define		EQEP_QEPCTL_IEL(x)	(((x) & 0x3) << 4)
-//#define		EQEP_QEPCTL_PHEN	(1 << 3)
-//#define		EQEP_QEPCTL_QCLM	(1 << 2)
-//#define		EQEP_QEPCTL_UTE		(1 << 1)
-//#define		EQEP_QEPCTL_WDE		(1 << 0)
-//#define EQEP_QCAPCTL	0x2c
-//#define EQEP_QPOSCTL	0x2e
-//#define EQEP_QEINT	0x30
-//#define EQEP_QFLG	0x32
-//#define EQEP_QCLR	0x34
-//#define EQEP_QFRC	0x36
-//#define		EQEP_INT_UTO		(1 << 11) /* Same for all intr regs */
-//#define		EQEP_INT_IEL		(1 << 10)
-//#define		EQEP_INT_SEL		(1 << 9)
-//#define		EQEP_INT_PCM		(1 << 8)
-//#define		EQEP_INT_PCR		(1 << 7)
-//#define		EQEP_INT_PCO		(1 << 6)
-//#define		EQEP_INT_PCU		(1 << 5)
-//#define		EQEP_INT_WTO		(1 << 4)
-//#define		EQEP_INT_QDC		(1 << 3)
-//#define		EQEP_INT_PHE		(1 << 2)
-//#define		EQEP_INT_PCE		(1 << 1)
-//#define		EQEP_INT_INT		(1 << 0)
-//#define		EQEP_INT_ENABLE_ALL	(EQEP_INT_UTO | EQEP_INT_IEL \
-//			| EQEP_INT_SEL | EQEP_INT_PCM | EQEP_INT_PCR \
-//			| EQEP_INT_PCO | EQEP_INT_PCU | EQEP_INT_WTO \
-//			| EQEP_INT_QDC | EQEP_INT_PHE | EQEP_INT_PCE)
-//#define		EQEP_INT_MASK		(EQEP_INT_ENABLE_ALL | EQEP_INT_INT)
-//#define EQEP_QEPSTS	0x38
-//#define		EQEP_QEPSTS_UPEVNT	(1 << 7)
-//#define		EQEP_QEPSTS_FDF		(1 << 6)
-//#define		EQEP_QEPSTS_QDF		(1 << 5)
-//#define		EQEP_QEPSTS_QDLF	(1 << 4)
-//#define		EQEP_QEPSTS_COEF	(1 << 3)
-//#define		EQEP_QEPSTS_CDEF	(1 << 2)
-//#define		EQEP_QEPSTS_FIMF	(1 << 1)
-//#define		EQEP_QEPSTS_PCEF	(1 << 0)
-//#define EQEP_QCTMR	0x3a
-//#define EQEP_QCPRD	0x3c
-//#define EQEP_QCTMRLAT	0x3e
-//#define EQEP_QCPRDLAT	0x40
-//#define EQEP_REVID	0x5c
-  
+  uint32_t getRevisionID();  
 };
 
 #endif /* end of include guard: BBB_EQEP_H */
