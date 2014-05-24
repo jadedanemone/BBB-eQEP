@@ -4,6 +4,7 @@ AC_PREREQ([2.69])
 AC_INIT([BBB-eQEP], [0.1], [james.zapico@gmail.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_AUX_DIR(auxdir)
 
 # Checks for programs.
 AC_PROG_CXX

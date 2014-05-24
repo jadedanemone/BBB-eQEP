@@ -10,4 +10,4 @@ build
 Makefile
 config.*
 stamp-h1
-doc
+docs
