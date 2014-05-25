@@ -21,8 +21,8 @@ eQEP_address_(eQEP_address)
   
   // Map the PWM memory range
   map_pwm_register();
-  int offset = eQEP_address_ & (getpagesize()-1);
-  position_p = (uint32_t *) (pwm_addr + EQEP_QPOSCNT  + offset);
+  eqep_addr = pwm_addr + (eQEP_address_ & (getpagesize()-1));
+  position_p = (uint32_t *) (eqep_addr + EQEP_QPOSCNT);
   
   debug(2, "eQEP successfully activated\n");
   active = true;
@@ -52,16 +52,16 @@ void eQEP::map_pwm_register()
 }
 
 void eQEP::setHelper(int offset, uint32_t value) {
-  *(uint32_t*)(pwm_addr + offset) = value;
+  *(uint32_t*)(eqep_addr + offset) = value;
 }
 void eQEP::setHelper(int offset, uint16_t value) {
-  *(uint16_t*)(pwm_addr + offset) = value;
+  *(uint16_t*)(eqep_addr + offset) = value;
 }
 uint32_t eQEP::getHelper32(int offset) {
-  return *(uint32_t*)(pwm_addr + offset);
+  return *(uint32_t*)(eqep_addr + offset);
 }
 uint16_t eQEP::getHelper16(int offset) {
-  return *(uint16_t*)(pwm_addr + offset);
+  return *(uint16_t*)(eqep_addr + offset);
 }
 
 uint32_t eQEP::getPosition()

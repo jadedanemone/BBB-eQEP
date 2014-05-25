@@ -114,6 +114,7 @@ private:
   bool active; /**< Set to true when the eQEP memory is properly mapped and available */
   
   uint8_t *pwm_addr; /**< Pointer to the parent PWM memory section */
+  uint8_t *eqep_addr; /**< Pointer to the EQEP memory section */
   volatile uint32_t *position_p; /**< Direct register access pointer */
   volatile uint32_t *pos_init_p; /**< Direct register access pointer */
   volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
