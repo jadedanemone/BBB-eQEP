@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([BBB-eQEP], [0.1], [james.zapico@gmail.com])
+AC_INIT([BBB-eQEP], [0.0.1], [james.zapico@gmail.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(auxdir)
@@ -40,6 +40,13 @@ AC_CHECK_FUNCS([memset munmap strerror])
 
 AM_INIT_AUTOMAKE([-Wall foreign])
 
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN";
+   then AC_MSG_WARN([Doxygen not found - continuing without Doxygen support])
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], 
+[test -n "$DOXYGEN"])AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
+
 
 AC_CONFIG_FILES([
  Makefile
@@ -47,6 +54,7 @@ AC_CONFIG_FILES([
  examples/Makefile
  include/Makefile
  dts/Makefile
+ docs/Makefile
 ])
 
 AC_OUTPUT
