@@ -128,6 +128,10 @@ private:
   **/
   void map_pwm_register();
   /**
+   * Intializes the PWM subsystem
+  **/
+  void initPWM();
+  /**
    * Writes the 32 bit value to the register at offset.
   **/
   void setHelper(int offset, uint32_t value);
@@ -160,6 +164,10 @@ public:
   **/
   ~eQEP();
   
+  /**
+   * Set the eQEP config registers with some defaults.
+  **/
+  void defaultSettings();
   // eQEP Position Counter Register
   /** Returns the current eQEP counter value
    * 32-bit position counter register counts up/down on every eQEP pulse

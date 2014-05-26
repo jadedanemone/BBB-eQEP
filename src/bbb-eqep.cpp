@@ -35,6 +35,27 @@ eQEP::~eQEP()
   close(eQEPFd);
 }
 
+void eQEP::initPWM() {
+  (pwm_addr + PWM_CLKCONFIG) |= PWM_CLKCONFIG_EQEPCLK_EN;
+}
+
+void eQEP::defaultSettings() {
+  // Set all options off
+  setDecoderControl(0);
+  // Enable the eQEP unit
+  setControl(EQEP_QEPCTL_PHEN);
+  // Set all options off
+  setCaptureControl(0);
+  // Set all options off
+  setPositionCompareControl(0);
+  // Default to no interrupts enabled.
+  setInterruptEnable(0);
+  // Clear all of the interrupts.
+  setInterruptClear(EQEP_INT_ENABLE_ALL);
+  // Clear all of the sticky bits.
+  setStatus(EQEP_QEPSTS_COEF | EQEP_QEPSTS_CDEF | EQEP_QEPSTS_FIMF);
+}
+
 void eQEP::map_pwm_register()
 {
   int masked_address = eQEP_address_ & ~(getpagesize()-1);
