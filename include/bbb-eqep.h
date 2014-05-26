@@ -11,94 +11,97 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#define EQEP_QPOSCNT	0x00
-#define EQEP_QPOSINIT	0x04
-#define EQEP_QPOSMAX	0x08
-#define EQEP_QPOSCMP	0x0c
-#define EQEP_QPOSILAT	0x10
-#define EQEP_QPOSSLAT	0x14
-#define EQEP_QPOSLAT	0x18
-#define EQEP_QUTMR	0x1c
-#define EQEP_QUPRD	0x20
-#define EQEP_QWDTMR	0x24
-#define EQEP_QWDPRD	0x26
-#define EQEP_QDECCTL	0x28
-#define		EQEP_QDECCTL_QSRC(x)	(((x) & 0x3) << 14)
-#define		EQEP_QDECCTL_SOEN	(1 << 13)
-#define		EQEP_QDECCTL_SPSEL	(1 << 12)
-#define		EQEP_QDECCTL_XCR	(1 << 11)
-#define		EQEP_QDECCTL_SWAP	(1 << 10)
-#define		EQEP_QDECCTL_IGATE	(1 << 9)
-#define		EQEP_QDECCTL_QAP	(1 << 8)
-#define		EQEP_QDECCTL_QBP	(1 << 7)
-#define		EQEP_QDECCTL_QIP	(1 << 6)
-#define		EQEP_QDECCTL_QSP	(1 << 5)
-#define EQEP_QEPCTL	0x2a
-#define		EQEP_QEPCTL_ECB(x)	(((x) & 0x3) << 14)
-#define		EQEP_QEPCTL_PCRM(x)	(((x) & 0x3) << 12)
-#define		EQEP_QEPCTL_SEI(x)	(((x) & 0x3) << 10)
-#define		EQEP_QEPCTL_IEI(x)	(((x) & 0x3) << 8)
-#define		EQEP_QEPCTL_SWI		(1 << 7)
-#define		EQEP_QEPCTL_SEL		(1 << 6)
-#define		EQEP_QEPCTL_IEL(x)	(((x) & 0x3) << 4)
-#define		EQEP_QEPCTL_PHEN	(1 << 3)
-#define		EQEP_QEPCTL_QCLM	(1 << 2)
-#define		EQEP_QEPCTL_UTE		(1 << 1)
-#define		EQEP_QEPCTL_WDE		(1 << 0)
-#define EQEP_QCAPCTL	0x2c
-#define   EQEP_QCAPCTL_CEN  (1 << 15)
-#define   EQEP_QCAPCTL_CCPS(x) (((x) & 0x7) << 4)
-#define   EQEP_QCAPCTL_UPPS(x)  ((x) & 0xF)
-#define EQEP_QPOSCTL	0x2e
-#define  EQEP_QPOSCTL_PCSHDW (1 << 15)
-#define  EQEP_QPOSCTL_PCLOAD (1 << 14)
-#define  EQEP_QPOSCTL_PCPOL  (1 << 13)
-#define  EQEP_QPOSCTL_PCE    (1 << 12)
-#define  EQEP_QPOSCTL_PCSPW(x) ((x) & 0xFFF)
-#define EQEP_QEINT	0x30
-#define EQEP_QFLG	0x32
-#define EQEP_QCLR	0x34
-#define EQEP_QFRC	0x36
-#define		EQEP_INT_UTO		(1 << 11) /* Same for all intr regs */
-#define		EQEP_INT_IEL		(1 << 10)
-#define		EQEP_INT_SEL		(1 << 9)
-#define		EQEP_INT_PCM		(1 << 8)
-#define		EQEP_INT_PCR		(1 << 7)
-#define		EQEP_INT_PCO		(1 << 6)
-#define		EQEP_INT_PCU		(1 << 5)
-#define		EQEP_INT_WTO		(1 << 4)
-#define		EQEP_INT_QDC		(1 << 3)
-#define		EQEP_INT_PHE		(1 << 2)
-#define		EQEP_INT_PCE		(1 << 1)
-#define		EQEP_INT_INT		(1 << 0)
+#define PWM_CLKCONFIG 0x08 ///< PWM Clock Configuration Register
+#define PWM_CLKCONFIG_EQEPCLKSTOP_REQ ///< This bit controls the clkstop_req input to the eQEP module
+#define PWM_CLKCONFIG_EQEPCLK_EN (1 << 4) ///< This bit controls the clk_en input to the eQEP module.
+#define EQEP_QPOSCNT	0x00 ///< eQEP Position Counter Register
+#define EQEP_QPOSINIT	0x04 ///< eQEP Position Counter Initialization Register
+#define EQEP_QPOSMAX	0x08 ///< eQEP Maximum Position Count Register
+#define EQEP_QPOSCMP	0x0c ///< eQEP Position-Compare Register
+#define EQEP_QPOSILAT	0x10 ///< eQEP Index Position Latch Register
+#define EQEP_QPOSSLAT	0x14 ///< eQEP Strobe Position Latch Register
+#define EQEP_QPOSLAT	0x18 ///< eQEP Position Counter Latch Register
+#define EQEP_QUTMR	0x1c   ///< eQEP Unit Timer Register
+#define EQEP_QUPRD	0x20   ///< eQEP Unit Period Register
+#define EQEP_QWDTMR	0x24   ///< eQEP Watchdog Timer Register
+#define EQEP_QWDPRD	0x26   ///< eQEP Watchdog Period Register
+#define EQEP_QDECCTL	0x28 ///< eQEP Decoder Control Register
+#define		EQEP_QDECCTL_QSRC(x)	(((x) & 0x3) << 14) ///< Position counter source selection bits (0-3h)
+#define		EQEP_QDECCTL_SOEN	(1 << 13)   ///< Sync output enable bit
+#define		EQEP_QDECCTL_SPSEL	(1 << 12) ///< Sync output pin selection bit
+#define		EQEP_QDECCTL_XCR	(1 << 11)   ///< External clock rate bit
+#define		EQEP_QDECCTL_SWAP	(1 << 10)   ///< Swap quadrature clock inputs bit
+#define		EQEP_QDECCTL_IGATE	(1 << 9)  ///< Index pulse gating option bit
+#define		EQEP_QDECCTL_QAP	(1 << 8)    ///< QEPA input polarity
+#define		EQEP_QDECCTL_QBP	(1 << 7)    ///< QEPB input polarity
+#define		EQEP_QDECCTL_QIP	(1 << 6)    ///< QEPI input polarity
+#define		EQEP_QDECCTL_QSP	(1 << 5)    ///< QEPS input polarity
+#define EQEP_QEPCTL	0x2a   ///< eQEP Control Register
+#define		EQEP_QEPCTL_ECB(x)	(((x) & 0x3) << 14) ///< Emulation control bits (0-3h)
+#define		EQEP_QEPCTL_PCRM(x)	(((x) & 0x3) << 12) ///< Position counter reset mode bits (0-3h)
+#define		EQEP_QEPCTL_SEI(x)	(((x) & 0x3) << 10) ///< Strobe event initialization of position counter bits (0-3h)
+#define		EQEP_QEPCTL_IEI(x)	(((x) & 0x3) << 8)  ///< Index event initialization of position counter bits (0-3h)
+#define		EQEP_QEPCTL_SWI		(1 << 7) ///< Software initialization of position counter bit
+#define		EQEP_QEPCTL_SEL		(1 << 6) ///< Strobe event latch of position counter bit
+#define		EQEP_QEPCTL_IEL(x)	(((x) & 0x3) << 4) ///< Index event latch of position counter bit
+#define		EQEP_QEPCTL_PHEN	(1 << 3) ///< Quadrature position counter enable/software reset bit
+#define		EQEP_QEPCTL_QCLM	(1 << 2) ///< eQEP capture latch mode bit
+#define		EQEP_QEPCTL_UTE		(1 << 1) ///< eQEP unit timer enable bit
+#define		EQEP_QEPCTL_WDE		(1 << 0) ///< eQEP watchdog enable bit
+#define EQEP_QCAPCTL	0x2c  ///< eQEP Capture Control Register
+#define   EQEP_QCAPCTL_CEN  (1 << 15) ///< enable eQEP capture
+#define   EQEP_QCAPCTL_CCPS(x) (((x) & 0x7) << 4) ///< eQEP capture timer clock prescaler bits (0-7h)
+#define   EQEP_QCAPCTL_UPPS(x)  ((x) & 0xF) ///< Unit position event prescaler bits (0-Fh)
+#define EQEP_QPOSCTL	0x2e  ///< eQEP Position-Compare Control Register
+#define  EQEP_QPOSCTL_PCSHDW (1 << 15) ///< Position compare shadow enable bit
+#define  EQEP_QPOSCTL_PCLOAD (1 << 14) ///< Position compare shadow load mode bit
+#define  EQEP_QPOSCTL_PCPOL  (1 << 13) ///< Polarity of sync output bit
+#define  EQEP_QPOSCTL_PCE    (1 << 12) ///< Position compare enable/disable bit
+#define  EQEP_QPOSCTL_PCSPW(x) ((x) & 0xFFF) ///< Select position compare sync output pulse width bits (0-FFFh)
+#define EQEP_QEINT	0x30    ///< eQEP Interrupt Enable Register
+#define EQEP_QFLG	0x32      ///< eQEP Interrupt Flag Register
+#define EQEP_QCLR	0x34      ///< eQEP Interrupt Clear Register
+#define EQEP_QFRC	0x36      ///< eQEP Interrupt Force Register
+#define		EQEP_INT_UTO		(1 << 11) ///< Unit time out interrupt bit
+#define		EQEP_INT_IEL		(1 << 10) ///< Index event latch interrupt bit
+#define		EQEP_INT_SEL		(1 << 9)  ///< Strobe event latch interrupt bit
+#define		EQEP_INT_PCM		(1 << 8)  ///< Position compare match interrupt bit
+#define		EQEP_INT_PCR		(1 << 7)  ///< Position compare ready interrupt bit
+#define		EQEP_INT_PCO		(1 << 6)  ///< Position counter overflow interrupt bit
+#define		EQEP_INT_PCU		(1 << 5)  ///< Position counter underflow interrupt bit
+#define		EQEP_INT_WTO		(1 << 4)  ///< Watchdog time out interrupt bit
+#define		EQEP_INT_QDC		(1 << 3)  ///< Quadrature direction change interrupt bit
+#define		EQEP_INT_PHE		(1 << 2)  ///< Quadrature phase error interrupt bit
+#define		EQEP_INT_PCE		(1 << 1)  ///< Position counter error interrupt bit
+#define		EQEP_INT_INT		(1 << 0)  ///< Global interrupt status bit
+/// All of the interrupt bits in one, except the global
 #define		EQEP_INT_ENABLE_ALL	(EQEP_INT_UTO | EQEP_INT_IEL \
 			| EQEP_INT_SEL | EQEP_INT_PCM | EQEP_INT_PCR \
 			| EQEP_INT_PCO | EQEP_INT_PCU | EQEP_INT_WTO \
 			| EQEP_INT_QDC | EQEP_INT_PHE | EQEP_INT_PCE)
+/// All of the interrupt bits in one, including the global
 #define		EQEP_INT_MASK		(EQEP_INT_ENABLE_ALL | EQEP_INT_INT)
-#define EQEP_QEPSTS	0x38
-#define		EQEP_QEPSTS_UPEVNT	(1 << 7)
-#define		EQEP_QEPSTS_FDF		(1 << 6)
-#define		EQEP_QEPSTS_QDF		(1 << 5)
-#define		EQEP_QEPSTS_QDLF	(1 << 4)
-#define		EQEP_QEPSTS_COEF	(1 << 3)
-#define		EQEP_QEPSTS_CDEF	(1 << 2)
-#define		EQEP_QEPSTS_FIMF	(1 << 1)
-#define		EQEP_QEPSTS_PCEF	(1 << 0)
-#define EQEP_QCTMR	0x3a
-#define EQEP_QCPRD	0x3c
-#define EQEP_QCTMRLAT	0x3e
-#define EQEP_QCPRDLAT	0x40
-#define EQEP_REVID	0x5c
+#define EQEP_QEPSTS	0x38   ///< eQEP Status Register
+#define		EQEP_QEPSTS_UPEVNT	(1 << 7) ///< Unit position event flag
+#define		EQEP_QEPSTS_FDF		(1 << 6)   ///< Direction the first index marker
+#define		EQEP_QEPSTS_QDF		(1 << 5)   ///< Quadrature direction flag
+#define		EQEP_QEPSTS_QDLF	(1 << 4)   ///< eQEP direction latch flag
+#define		EQEP_QEPSTS_COEF	(1 << 3)   ///< Capture overflow eror flag
+#define		EQEP_QEPSTS_CDEF	(1 << 2)   ///< Capture direction error flag
+#define		EQEP_QEPSTS_FIMF	(1 << 1)   ///< First index marker flag
+#define		EQEP_QEPSTS_PCEF	(1 << 0)   ///< Position counter error flag
+#define EQEP_QCTMR	0x3a    ///< eQEP Capture Timer Register
+#define EQEP_QCPRD	0x3c    ///< eQEP Capture Period Register
+#define EQEP_QCTMRLAT	0x3e  ///< eQEP Capture Timer Latch Register
+#define EQEP_QCPRDLAT	0x40  ///< eQEP Capture Period Latch Register
+#define EQEP_REVID	0x5c    ///< eQEP Revision ID Register
         
-#define eQEP0 0x48300180
-#define eQEP1 0x48302180
-#define eQEP2 0x48304180
+#define eQEP0 0x48300180 ///< Starting address of eQEP0
+#define eQEP1 0x48302180 ///< Starting address of eQEP1
+#define eQEP2 0x48304180 ///< Starting address of eQEP2
 
-#define EQEP_INPUT_DEV_PHYS_SIZE	32
-#define eQEP_BLOCK_LENGTH  0x7F
-#define eQEP_POS_LENGTH    0x04
-#define PWM_BLOCK_LENGTH   0x25F
+#define eQEP_BLOCK_LENGTH  0x7F  ///< Total memory length set aside for eQEP
+#define PWM_BLOCK_LENGTH   0x25F ///< Length of the whole PWM subsystem
 
 /** Beaglebone Black eQEP control and access class
  * This class allows for easy setup of all of the TI Sitara's eQEP registers.
@@ -111,7 +114,8 @@ private:
   int eQEP_address_; /**< The start address of the eQEP memory section */
   int eQEPFd; /**< File descriptor to a mmap of the eQEP memory section */
   
-  bool active; /**< Set to true when the eQEP memory is properly mapped and available */
+  bool active; /**< Set to true when the eQEP memory is properly mapped and
+                    available */
   
   uint8_t *pwm_addr; /**< Pointer to the parent PWM memory section */
   uint8_t *eqep_addr; /**< Pointer to the EQEP memory section */
@@ -119,19 +123,33 @@ private:
   volatile uint32_t *pos_init_p; /**< Direct register access pointer */
   volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
   
+  /**
+   * Maps the pwm register.
+  **/
   void map_pwm_register();
-  /////////////////////
-  /* New Functions!! */
-  /////////////////////
+  /**
+   * Writes the 32 bit value to the register at offset.
+  **/
   void setHelper(int offset, uint32_t value);
+  /**
+   * Writes the 16 bit value to the register at offset.
+  **/
   void setHelper(int offset, uint16_t value);
+  /**
+   * Gets the 32 bit value in the register at offset.
+  **/
   uint32_t getHelper32(int offset);
+  /**
+   * Gets the 16 bit value in the register at offset.
+  **/
   uint16_t getHelper16(int offset);
 	
 public:
   /**
-   * Constructor. Pass the eQEP address.
+   * Constructor. Pass the eQEP address. Sets some defaults. Sets the necessary
+   * bits to start the eQEP peripheral.
    *
+   * /param eQEP_address An integer which describes the starting address of the eQEP peripheral
    * @see eQEP0
    * @see eQEP1
    * @see eQEP2
@@ -899,9 +917,9 @@ public:
   /**
    * Clear triggered interrupts
    *
-   * \param Set bits indicating the interrupts to clear
+   * \param value Set bits indicating the interrupts to clear
   **/
-  void setInterruptClear(uint16_t);
+  void setInterruptClear(uint16_t value);
   /**
    * Clear all of the interrupts
   **/

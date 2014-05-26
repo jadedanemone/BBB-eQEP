@@ -7,6 +7,6 @@ DTBs=$(patsubst %.dts,%.dtbo,$(DTS))
 
 all: $(DTBs)
 
-clean:
+clean-local:
 	rm -f  $(DTBs)
 

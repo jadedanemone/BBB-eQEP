@@ -94,9 +94,6 @@ void eQEP::setMaxPos(uint32_t max_pos)
   setHelper(EQEP_QPOSMAX,max_pos);
 }
 
-/////////////////////
-/* New Functions!! */
-/////////////////////
 // eQEP Position-Compare Register
 /**
  * The position-compare value in this register is compared with the position
