@@ -11,3 +11,4 @@ Makefile
 config.*
 stamp-h1
 docs
+*.xcworkspace
