@@ -10,7 +10,11 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <inttypes.h>
 
+namespace BBB
+{
+#define PWM_SYSCONFIG 0x04 ///< PWM System Configuration Register
 #define PWM_CLKCONFIG 0x08 ///< PWM Clock Configuration Register
 #define PWM_CLKCONFIG_EQEPCLKSTOP_REQ ///< This bit controls the clkstop_req input to the eQEP module
 #define PWM_CLKCONFIG_EQEPCLK_EN (1 << 4) ///< This bit controls the clk_en input to the eQEP module.
@@ -165,7 +169,17 @@ public:
   ~eQEP();
   
   /**
-   * Set the eQEP config registers with some defaults.
+   * Returns the mmaped pointer to the PWM subsystem.
+  **/
+  uint8_t* getPWMSSPointer();
+  /**
+   * Returns the mmaped pointer to the eQEP peripheral.
+  **/
+  uint8_t* getEQEPPointer();
+  
+  /**
+   * Set the eQEP config registers with some defaults. Automatically called by 
+   * eQEP().
   **/
   void defaultSettings();
   // eQEP Position Counter Register
@@ -1191,5 +1205,7 @@ public:
   **/
   uint32_t getRevisionID();  
 };
+
+} /* BBB */
 
 #endif /* end of include guard: BBB_EQEP_H */

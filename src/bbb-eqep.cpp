@@ -8,6 +8,8 @@
 #include "../include/bbb-eqep.h"
 #include "../include/debug.h"
 
+namespace BBB
+{
 eQEP::eQEP(int eQEP_address):
 eQEP_address_(eQEP_address)
 {
@@ -25,6 +27,7 @@ eQEP_address_(eQEP_address)
   position_p = (uint32_t *) (eqep_addr + EQEP_QPOSCNT);
   
   debug(2, "eQEP successfully activated\n");
+  defaultSettings();
   active = true;
 }
 
@@ -36,7 +39,15 @@ eQEP::~eQEP()
 }
 
 void eQEP::initPWM() {
-  (pwm_addr + PWM_CLKCONFIG) |= PWM_CLKCONFIG_EQEPCLK_EN;
+  *(uint32_t*)(pwm_addr + PWM_CLKCONFIG) |= PWM_CLKCONFIG_EQEPCLK_EN;
+}
+
+uint8_t* eQEP::getPWMSSPointer() {
+  return pwm_addr;
+}
+
+uint8_t* eQEP::getEQEPPointer() {
+  return eqep_addr;
 }
 
 void eQEP::defaultSettings() {
@@ -1423,3 +1434,5 @@ void eQEP::setCapturePeriodLatch(uint16_t value) {
 uint32_t eQEP::getRevisionID() {
   return getHelper32(EQEP_REVID);
 }
+
+} /* BBB */
