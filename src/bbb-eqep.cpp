@@ -13,6 +13,19 @@ namespace BBB
 eQEP::eQEP(int eQEP_address):
 eQEP_address_(eQEP_address)
 {
+  if (eQEP_address_ < 3) {
+    switch (eQEP_address_) {
+    case 0:
+      eQEP_address_ = eQEP0;
+      break;
+    case 1:
+      eQEP_address_ = eQEP1;
+      break;
+    case 2:
+      eQEP_address_ = eQEP2;
+      break;
+    }
+  }
   active = false;
   eQEPFd = open("/dev/mem", O_RDWR | O_SYNC);
   if (eQEPFd < 0)

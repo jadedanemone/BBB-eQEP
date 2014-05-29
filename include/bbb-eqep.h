@@ -124,8 +124,6 @@ private:
   uint8_t *pwm_addr; /**< Pointer to the parent PWM memory section */
   uint8_t *eqep_addr; /**< Pointer to the EQEP memory section */
   volatile uint32_t *position_p; /**< Direct register access pointer */
-  volatile uint32_t *pos_init_p; /**< Direct register access pointer */
-  volatile uint32_t *max_pos_p;  /**< Direct register access pointer */
   
   /**
    * Maps the pwm register.
@@ -157,7 +155,9 @@ public:
    * Constructor. Pass the eQEP address. Sets some defaults. Sets the necessary
    * bits to start the eQEP peripheral.
    *
-   * /param eQEP_address An integer which describes the starting address of the eQEP peripheral
+   * /param eQEP_address An integer (0-2) which is the number of the eQEP, or
+   *                     an integer which describes the starting address of the
+   *                     eQEP peripheral.
    * @see eQEP0
    * @see eQEP1
    * @see eQEP2
@@ -251,7 +251,7 @@ public:
    * @see setPosition()
    * @see setPositionCompareControl()
   **/
-  void setPositionCompare(uint32_t);
+  void setPositionCompare(uint32_t value);
   
   // eQEP Index Position Latch Register
   /**
@@ -288,7 +288,7 @@ public:
    * timer value matches with unit time period value, unit time event is
    * generated.
   **/
-  void setUnitTimer(uint32_t);
+  void setUnitTimer(uint32_t value);
   
   // eQEP Unit Period Register
   /**
@@ -302,7 +302,7 @@ public:
    * periodic unit time events to latch the eQEP position information at
    * periodic interval and optionally to generate interrupt.
   **/
-  void setUnitPeriod(uint32_t);
+  void setUnitPeriod(uint32_t value);
   
   // eQEP Watchdog Timer Register
   /**
@@ -318,7 +318,7 @@ public:
    * interrupt is generated. This register is reset upon edge transition in
    * quadrature-clock indicating the motion.
   **/
-  void setWatchdogTimer(uint16_t);
+  void setWatchdogTimer(uint16_t value);
   
   // eQEP Watchdog Period Register
   /** 
@@ -332,7 +332,7 @@ public:
    * dog timer. When the watchdog timer value matches the watchdog period
    * value, a watchdog timeout interrupt is generated.
   **/
-  void setWatchdogPeriod(uint16_t);
+  void setWatchdogPeriod(uint16_t value);
   
   // eQEP Decoder Control Register
   /**
@@ -342,7 +342,7 @@ public:
   /**
    * Set the current eQEP Decoder control register setting
   **/
-  void setDecoderControl(uint16_t);
+  void setDecoderControl(uint16_t value);
   
   /**
    * Position-Counter source selection.
@@ -420,7 +420,7 @@ public:
   /**
    * set eQEP Control Register
   **/
-  void setControl(uint16_t);
+  void setControl(uint16_t value);
   
   /**
    * Emulation control enum. Effects eQEP behavior through emulation suspensions
@@ -631,7 +631,7 @@ public:
    * switching CAPCLK prescaling mode from QCLK/4 to QCLK/8). The capture unit
    * must be disabled before changing the prescaler. @see disableCaptureUnit()
   **/
-  void setCaptureControl(uint16_t);
+  void setCaptureControl(uint16_t value);
   /**
    * Disable eQEP Capture Unit
   **/
@@ -690,7 +690,7 @@ public:
   /**
    * Set Position Compare Control register value.
   **/
-  void setPositionCompareControl(uint16_t);
+  void setPositionCompareControl(uint16_t value);
   /**
    * Disable Position Compare Shadow. Load Immediate
   **/
@@ -752,7 +752,7 @@ public:
    * (value+1) * 4 * SYSCLKOUT cycles.
    * Should be between 0h and FFFh.
   **/
-  void setPositionCompareSyncOutputPulseWidth(uint16_t);
+  void setPositionCompareSyncOutputPulseWidth(uint16_t value);
   
   // eQEP Interrupt Enable Register
   /**
@@ -762,7 +762,7 @@ public:
   /**
    * Turn on interrupts by passing the correct bits
   **/
-  void setInterruptEnable(uint16_t);
+  void setInterruptEnable(uint16_t value);
   /**
    * Enable Unit Timeout Interrupt
   **/
@@ -1004,7 +1004,7 @@ public:
   /**
    * Force interrupts to be triggered.
   **/
-  void setInterruptForce(uint16_t);
+  void setInterruptForce(uint16_t value);
   /**
    * Force the Unit Time Out Interrupt flag.
   **/
@@ -1058,7 +1058,7 @@ public:
   /**
    * Set the status of the eQEP functions. Only some bits may be set.
   **/
-  void setStatus(uint16_t);
+  void setStatus(uint16_t value);
   /**
    * Unit position event flag
    *
@@ -1148,7 +1148,7 @@ public:
    * @see setCaptureTimeClockPrescaler()
    * @see enableCaptureUnit()
   **/
-  void setCaptureTimer(uint16_t);
+  void setCaptureTimer(uint16_t value);
   
   // eQEP Capture Period Register
   /**
@@ -1168,7 +1168,7 @@ public:
    * @see setCaptureTimeClockPrescaler()
    * @see enableCaptureUnit()
   **/
-  void setCapturePeriod(uint16_t);
+  void setCapturePeriod(uint16_t value);
   // eQEP Capture Timer Latch Register
   /**
    * The eQEP capture timer value can be latched into this register on two
@@ -1197,7 +1197,7 @@ public:
    * @see setCaptureTimeClockPrescaler()
    * @see enableCaptureUnit()
   **/
-  void setCapturePeriodLatch(uint16_t);
+  void setCapturePeriodLatch(uint16_t value);
   
   // eQEP Revision ID Register
   /**
