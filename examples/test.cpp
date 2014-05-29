@@ -32,13 +32,13 @@ int main (int argc, char const *argv[])
   
   eQEP eqep(eqep_num);
   
-  printf("SYSCONFIG 0x%zu\n", *(uint32_t*)(eqep.getPWMSSPointer() + PWM_SYSCONFIG));
-  printf("CLKCONFIG 0x%zu\n", *(uint32_t*)(eqep.getPWMSSPointer()+PWM_CLKCONFIG));
+  printf("SYSCONFIG 0x%iu\n", *(uint32_t*)(eqep.getPWMSSPointer() + PWM_SYSCONFIG));
+  printf("CLKCONFIG 0x%iu\n", *(uint32_t*)(eqep.getPWMSSPointer()+PWM_CLKCONFIG));
   printf("QEPCTL0   0x%X\n",  eqep.getControl());
   printf("QDECCTL0  0x%X\n",  eqep.getDecoderControl());
-  printf("QEINT0    0x%X\n",	eqep.getInterruptEnable());
-  printf("QUPRD0    0x%zu\n", eqep.getUnitPeriod());
-  printf("QPOSMAX0  0x%zu\n", eqep.getMaxPos());
+  printf("QEINT0    0x%X\n",  eqep.getInterruptEnable());
+  printf("QUPRD0    0x%iu\n", eqep.getUnitPeriod());
+  printf("QPOSMAX0  0x%iu\n", eqep.getMaxPos());
   printf("QEPSTS0   0x%X\n",  eqep.getStatus());
   
   eqep0_pos = eqep.getPosition();
@@ -57,15 +57,16 @@ int main (int argc, char const *argv[])
   float time_per_read = (float)dt_micros/num_reads;
   long double change_rate = ((uint32_t)(eqep_pos - eqep0_pos))/(dt_micros/1000000);
  
-  printf("last position %zu\n", eqep_pos);
+  printf("last position %iu\n", eqep_pos);
   printf("micros per read %f\n", time_per_read);
   printf("quadrature Hz %Lf\n",change_rate);
-  printf("revid 0x%zu (should read 44D31103)\n",eqep.getRevisionID());
+  printf("revid 0x%iu (should read 44D31103)\n",eqep.getRevisionID());
   
-  //for(i=0;i<10000000;i++){	
-  //  printf("\reqep: %zu",eqep.getPosition());
-  //  usleep(5000);
-  //}
+  for(i=0;i<10000000;i++){
+    printf("\reqep: %zu       ",eqep.getPosition());
+    usleep(5000);
+  }
+  printf("\n");
   
   return 0;
 }
