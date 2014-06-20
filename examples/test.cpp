@@ -38,7 +38,7 @@ int main (int argc, char const *argv[])
   printf("QDECCTL0  0x%X\n",  eqep.getDecoderControl());
   printf("QEINT0    0x%X\n",  eqep.getInterruptEnable());
   printf("QUPRD0    0x%u\n", eqep.getUnitPeriod());
-  printf("QPOSMAX0  0x%u\n", eqep.getMaxPos());
+  printf("QPOSMAX0  0x%X\n", eqep.getMaxPos());
   printf("QEPSTS0   0x%X\n",  eqep.getStatus());
   
   eqep0_pos = eqep.getPosition();
@@ -55,12 +55,12 @@ int main (int argc, char const *argv[])
   //find difference between start and end time
   unsigned long dt_micros = (1000000 * tv2.tv_sec + tv2.tv_usec)-(1000000 * tv1.tv_sec + tv1.tv_usec);
   float time_per_read = (float)dt_micros/num_reads;
-  long double change_rate = ((uint32_t)(eqep_pos - eqep0_pos))/(dt_micros/1000000);
+  double change_rate = ((uint32_t)(eqep_pos - eqep0_pos))/(dt_micros/1000000);
  
-  printf("last position %iu\n", eqep_pos);
+  printf("last position %i\n", eqep_pos);
   printf("micros per read %f\n", time_per_read);
-  printf("quadrature Hz %Lf\n",change_rate);
-  printf("revid 0x%iu (should read 44D31103)\n",eqep.getRevisionID());
+  // printf("quadrature Hz %Lf\n",change_rate);
+  printf("revid 0x%X (should read 44D31103)\n",eqep.getRevisionID());
   
   for(i=0;i<10000000;i++){
     printf("\reqep: %zu       ",eqep.getPosition());
