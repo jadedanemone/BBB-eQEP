@@ -32,13 +32,13 @@ int main (int argc, char const *argv[])
   
   eQEP eqep(eqep_num);
   
-  printf("SYSCONFIG 0x%iu\n", *(uint32_t*)(eqep.getPWMSSPointer() + PWM_SYSCONFIG));
-  printf("CLKCONFIG 0x%iu\n", *(uint32_t*)(eqep.getPWMSSPointer()+PWM_CLKCONFIG));
+  printf("SYSCONFIG 0x%X\n", *(uint32_t*)(eqep.getPWMSSPointer() + PWM_SYSCONFIG));
+  printf("CLKCONFIG 0x%X\n", *(uint32_t*)(eqep.getPWMSSPointer()+PWM_CLKCONFIG));
   printf("QEPCTL0   0x%X\n",  eqep.getControl());
   printf("QDECCTL0  0x%X\n",  eqep.getDecoderControl());
   printf("QEINT0    0x%X\n",  eqep.getInterruptEnable());
-  printf("QUPRD0    0x%iu\n", eqep.getUnitPeriod());
-  printf("QPOSMAX0  0x%iu\n", eqep.getMaxPos());
+  printf("QUPRD0    0x%u\n", eqep.getUnitPeriod());
+  printf("QPOSMAX0  0x%u\n", eqep.getMaxPos());
   printf("QEPSTS0   0x%X\n",  eqep.getStatus());
   
   eqep0_pos = eqep.getPosition();
