@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([BBB-eQEP], [0.0.1], [james.zapico@gmail.com])
+AC_INIT([BBB-eQEP], [0.1], [james.zapico@gmail.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(auxdir)
@@ -20,7 +20,7 @@ AC_LANG_PUSH([C++])
 # Checks for libraries.
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/ioctl.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h inttypes.h stdint.h stdlib.h string.h sys/ioctl.h unistd.h sys/mman.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AX_CXX_COMPILE_STDCXX_11
@@ -36,7 +36,7 @@ AC_TYPE_INT32_T
 
 # Checks for library functions.
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([memset munmap strerror])
+AC_CHECK_FUNCS([munmap strerror getpagesize])
 
 AM_INIT_AUTOMAKE([-Wall foreign])
 
