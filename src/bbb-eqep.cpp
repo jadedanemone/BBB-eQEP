@@ -78,6 +78,8 @@ void eQEP::defaultSettings() {
   setInterruptClear(EQEP_INT_ENABLE_ALL);
   // Clear all of the sticky bits.
   setStatus(EQEP_QEPSTS_COEF | EQEP_QEPSTS_CDEF | EQEP_QEPSTS_FIMF);
+  // Set the Max Position to the maximum possible.
+  setMaxPos(-1);
 }
 
 void eQEP::map_pwm_register()
