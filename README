@@ -1,0 +1,16 @@
+BBB eQEP Library
+================
+
+bbb-eqep is a library for accessing the eQEP modules built into the Beaglebone Black's microprocessor. Although this library has only been tested on the BBB, it will likely work on other TI processors that include the eQEP modules.
+
+Building and Installation
+=========================
+Please see the INSTALL file for detailed instructions. Here's the basics:
+
+````shell
+autoreconf
+./configure
+make
+make install
+````
+

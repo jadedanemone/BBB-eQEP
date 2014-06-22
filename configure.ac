@@ -38,7 +38,7 @@ AC_TYPE_INT32_T
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([munmap strerror getpagesize])
 
-AM_INIT_AUTOMAKE([-Wall foreign])
+AM_INIT_AUTOMAKE([-Wall])
 
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
 if test -z "$DOXYGEN";
