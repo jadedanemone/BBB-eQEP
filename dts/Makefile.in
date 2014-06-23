@@ -190,7 +190,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-DTS = bone_eqep0.dts bone_eqep1.dts bone_eqep2.dts bone_eqep2alt.dts
+DTS = fast_eqep0.dts fast_eqep1.dts fast_eqep2.dts fast_eqep2alt.dts
 DTBOs = $(patsubst %.dts,%-00A0.dtbo,$(DTS))
 all: all-am
 
