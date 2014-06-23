@@ -1,0 +1,9 @@
+James Zapico <james.zapico@gmail.com>: Most code in bbb-eqep.cpp, bbb-eqep.h, and test.cpp
+
+Some commentary taken from TI Technical Reference Manual SPRUH73J.
+
+Mark A. Greer <mgreer@mvista.com>: EQEP defines in bbb-eqep.h under GPL v2.
+
+Jacek Radzikowski: debug.h under LGPL from IOoo.
+
+Nathaniel R. Lewis: .dts files under GPL v2 as modified by James Zapico.

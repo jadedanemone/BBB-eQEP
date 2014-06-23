@@ -2,6 +2,7 @@
 ## ./src/Makefile.am
 
 AM_CPPFLAGS=-I${top_srcdir}/include/
+ACLOCAL_AMFLAGS = "-I../m4"
 
-lib_LIBRARIES = libbbb-eqep.a
-libbbb_eqep_a_SOURCES = bbb-eqep.cpp
+lib_LTLIBRARIES = libbbb-eqep.la
+libbbb_eqep_la_SOURCES = bbb-eqep.cpp
