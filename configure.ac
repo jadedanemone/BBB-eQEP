@@ -5,6 +5,7 @@ AC_INIT([BBB-eQEP], [0.1], [james.zapico@gmail.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(auxdir)
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -12,12 +13,12 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_AWK
 AC_PROG_MKDIR_P
-AC_PROG_RANLIB
 AM_PROG_AR
 
 AC_LANG_PUSH([C++])
 
 # Checks for libraries.
+LT_INIT
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h inttypes.h stdint.h stdlib.h string.h sys/ioctl.h unistd.h sys/mman.h])

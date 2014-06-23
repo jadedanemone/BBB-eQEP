@@ -2,8 +2,7 @@
 ## ./examples/Makefile.am
 
 AM_CPPFLAGS=-I${top_srcdir}/include/ -DDEBUG_LEVEL=5
-AM_LDFLAGS=-L../src
-LDADD = ../src/libbbb-eqep.a
+LDADD = ../src/libbbb-eqep.la
 
 noinst_PROGRAMS = test
 

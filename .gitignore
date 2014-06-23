@@ -1,5 +1,10 @@
 .svn
 *.o
+*.so
+*.la
+*.lo
+src/.deps
+src/.libs
 build
 *.Po
 Makefile

@@ -5,3 +5,5 @@ SUBDIRS = src examples dts include docs
 
 ## Include the library headers
 # AM_CPPFLAGS = "-Iinclude/"
+
+ACLOCAL_AMFLAGS = "-Im4"
