@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2014 James Zapico <james.zapico@gmail.com>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -97,6 +114,11 @@ void eQEP::map_pwm_register()
     "eQEP::eQEP() eQEP at address 0x%08x mapped\n",
     masked_address);
 }
+
+eQEP::operator uint32_t() {
+  return getPosition();
+}
+
 
 void eQEP::setHelper(int offset, uint32_t value) {
   *(uint32_t*)(eqep_addr + offset) = value;
