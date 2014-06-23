@@ -1,4 +1,4 @@
-DTS=bone_eqep0.dts bone_eqep1.dts bone_eqep2.dts bone_eqep2alt.dts
+DTS=fast_eqep0.dts fast_eqep1.dts fast_eqep2.dts fast_eqep2alt.dts
 
 DTBOs=$(patsubst %.dts,%-00A0.dtbo,$(DTS))
 
