@@ -317,7 +317,7 @@ void eQEP::positionCounterSourceSelection(int source) {
     // Ensure both bits are off
     (getDecoderControl() & ~(EQEP_QDECCTL_QSRC(3)))
       // Then set whichever need to be on again
-      & (source << 14));
+      | (source << 14));
 }
 /**
  * Disable position-compare sync output.
@@ -344,8 +344,8 @@ void eQEP::enableSyncOutput(SOPin pin) {
   setDecoderControl(
     // Ensure the pin is off
     (getDecoderControl() & ~EQEP_QDECCTL_SOEN)
-      // Then turn it back on
-      & ((uint16_t)pin << 12));
+      // Then turn it back on again
+      | ((uint16_t)pin << 12));
 }
 /**
  * External clock rate. Default (2x).
@@ -445,7 +445,7 @@ void eQEP::setEmulationControl(ECB mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_ECB(3)))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 14));
+      | ((uint16_t)mode << 14));
 }
 /**
  * Position Counter Reset Mode enum.
@@ -466,7 +466,7 @@ void eQEP::setPositionCounterResetMode(PCRM mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_PCRM(3)))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 12));
+      | ((uint16_t)mode << 12));
 }
 /**
  * Strobe event initialization enum.
@@ -498,7 +498,7 @@ void eQEP::setStrobeEventInit(SEI mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_SEI(3)))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 10));
+      | ((uint16_t)mode << 10));
 }
 /**
  * Index Event Initialization of position counter enum
@@ -527,7 +527,7 @@ void eQEP::setIndexEventInit(IEI mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_IEI(3)))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 8));
+      | ((uint16_t)mode << 8));
 }
 /**
  * Software initialization of position counter. Call this function to reset
@@ -565,7 +565,7 @@ void eQEP::setStrobeEventPositionLatch(SEL mode) {
     // Ensure the bit is off
     (getControl() & ~(EQEP_QEPCTL_SEL))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 6));
+      | ((uint16_t)mode << 6));
 }
 /**
  * Strobe event latch of position counter
@@ -595,7 +595,7 @@ void eQEP::setIndexEventPositionLatch(IEL mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_IEL(3)))
       // Then set whichever need to be on again
-      & ((uint16_t)mode << 4));
+      | ((uint16_t)mode << 4));
 }
 /**
  * Quadrature position counter enable/software reset
@@ -642,7 +642,7 @@ void eQEP::setCaptureLatchMode(CLM mode) {
     // Ensure the bits is
     (getControl() & ~(EQEP_QEPCTL_QCLM))
       // Then set on again
-      & ((uint16_t)mode << 2));
+      | ((uint16_t)mode << 2));
 }
 /**
  * Enables the unit timer
