@@ -41,7 +41,7 @@
     fragment@2 {
             target = <&ocp>;
             __overlay__ {
-                eqep1_helper: helper {
+                eqep1_helper {
                     compatible = "bone-pinmux-helper";
                     pinctrl-names = "default";
                     pinctrl-0 = <&pinctrl_eqep1>;
