@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # libtool - Provide generalized library-building support services.
-# Generated automatically by config.status (bbb-eqep) 0.1.2
-# Libtool was configured on host RaringServer:
+# Generated automatically by config.status (bbb-eqep) 0.1.3
+# Libtool was configured on host bbb:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -66,13 +66,13 @@ PATH_SEPARATOR=":"
 
 # The host system.
 host_alias=
-host=i686-pc-linux-gnu
-host_os=linux-gnu
+host=armv7l-unknown-linux-gnueabihf
+host_os=linux-gnueabihf
 
 # The build system.
 build_alias=
-build=i686-pc-linux-gnu
-build_os=linux-gnu
+build=armv7l-unknown-linux-gnueabihf
+build_os=linux-gnueabihf
 
 # A sed program that does not truncate output.
 SED="/bin/sed"
@@ -93,7 +93,7 @@ FGREP="/bin/grep -F"
 NM="/usr/bin/nm -B"
 
 # Whether we need soft or hard links.
-LN_S="cp -pR"
+LN_S="ln -s"
 
 # What is the maximum length of a command?
 max_cmd_len=805306365
@@ -272,10 +272,10 @@ finish_eval=""
 hardcode_into_libs=yes
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/usr/lib/gcc/i686-linux-gnu/4.8 /usr/lib/i386-linux-gnu /usr/lib /lib/i386-linux-gnu /lib "
+sys_lib_search_path_spec="/usr/lib/gcc/arm-linux-gnueabihf/4.6 /usr/lib/arm-linux-gnueabihf /usr/lib /lib/arm-linux-gnueabihf /lib "
 
 # Run-time system search path for libraries.
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/i386-linux-gnu/mesa /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /lib/arm-linux-gnueabihf /usr/lib/arm-linux-gnueabihf /usr/local/lib "
 
 # Whether dlopen is supported.
 dlopen_support=unknown
@@ -10230,17 +10230,17 @@ file_list_spec=""
 hardcode_action=immediate
 
 # The directories searched by this compiler when creating a shared library.
-compiler_lib_search_dirs="/usr/lib/gcc/i686-linux-gnu/4.8 /usr/lib/gcc/i686-linux-gnu/4.8/../../../i386-linux-gnu /usr/lib/gcc/i686-linux-gnu/4.8/../../../../lib /lib/i386-linux-gnu /lib/../lib /usr/lib/i386-linux-gnu /usr/lib/../lib /usr/lib/gcc/i686-linux-gnu/4.8/../../.."
+compiler_lib_search_dirs="/usr/lib/gcc/arm-linux-gnueabihf/4.6 /usr/lib/gcc/arm-linux-gnueabihf/4.6/../../../arm-linux-gnueabihf /usr/lib/gcc/arm-linux-gnueabihf/4.6/../../.. /lib/arm-linux-gnueabihf /usr/lib/arm-linux-gnueabihf"
 
 # Dependencies to place before and after the objects being linked to
 # create a shared library.
-predep_objects="/usr/lib/gcc/i686-linux-gnu/4.8/../../../i386-linux-gnu/crti.o /usr/lib/gcc/i686-linux-gnu/4.8/crtbeginS.o"
-postdep_objects="/usr/lib/gcc/i686-linux-gnu/4.8/crtendS.o /usr/lib/gcc/i686-linux-gnu/4.8/../../../i386-linux-gnu/crtn.o"
+predep_objects="/usr/lib/gcc/arm-linux-gnueabihf/4.6/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/4.6/crtbeginS.o"
+postdep_objects="/usr/lib/gcc/arm-linux-gnueabihf/4.6/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/4.6/../../../arm-linux-gnueabihf/crtn.o"
 predeps=""
 postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib/gcc/i686-linux-gnu/4.8 -L/usr/lib/gcc/i686-linux-gnu/4.8/../../../i386-linux-gnu -L/usr/lib/gcc/i686-linux-gnu/4.8/../../../../lib -L/lib/i386-linux-gnu -L/lib/../lib -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/i686-linux-gnu/4.8/../../.."
+compiler_lib_search_path="-L/usr/lib/gcc/arm-linux-gnueabihf/4.6 -L/usr/lib/gcc/arm-linux-gnueabihf/4.6/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/4.6/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf"
 
 # ### END LIBTOOL TAG CONFIG: CXX
