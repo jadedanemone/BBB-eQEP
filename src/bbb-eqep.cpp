@@ -715,7 +715,7 @@ void eQEP::enableCaptureUnit() {
 void eQEP::setCaptureTimeClockPrescaler(int value) {
   setCaptureControl(
     (getCaptureControl() & ~EQEP_QCAPCTL_CCPS(7))
-      | (EQEP_QCAPCTL_CCPS(7) & value));
+      | (EQEP_QCAPCTL_CCPS(7) & EQEP_QCAPCTL_CCPS(value)));
 }
 /**
  * Unit position event prescaler.
@@ -730,7 +730,7 @@ void eQEP::setCaptureTimeClockPrescaler(int value) {
 void eQEP::setPositionEventPrescaler(int value) {
   setCaptureControl(
     (getCaptureControl() & ~EQEP_QCAPCTL_UPPS(0xF))
-      | (EQEP_QCAPCTL_UPPS(0xF) & value));
+      | (EQEP_QCAPCTL_UPPS(0xF) & EQEP_QCAPCTL_UPPS(value)));
 }
 
 // eQEP Position-Compare Control Register
