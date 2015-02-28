@@ -1416,7 +1416,7 @@ void eQEP::setCaptureTimer(uint16_t value) {
  * @see enableCaptureUnit()
 **/
 uint16_t eQEP::getCapturePeriod() {
-  return getHelper16(EQEP_QCTMR);
+  return getHelper16(EQEP_QCPRD);
 }
 /**
  * This register holds the period count value between the last successive
@@ -1427,7 +1427,7 @@ uint16_t eQEP::getCapturePeriod() {
  * @see enableCaptureUnit()
 **/
 void eQEP::setCapturePeriod(uint16_t value) {
-  setHelper(EQEP_QCTMR, value);
+  setHelper(EQEP_QCPRD, value);
 }
 // eQEP Capture Timer Latch Register
 /**
