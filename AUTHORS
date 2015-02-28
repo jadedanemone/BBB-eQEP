@@ -7,3 +7,5 @@ Mark A. Greer <mgreer@mvista.com>: EQEP defines in bbb-eqep.h under GPL v2.
 Jacek Radzikowski: debug.h under LGPL from IOoo.
 
 Nathaniel R. Lewis: .dts files under GPL v2 as modified by James Zapico.
+
+Riccardo Tornese: GitHub pull requests #3 & #4
