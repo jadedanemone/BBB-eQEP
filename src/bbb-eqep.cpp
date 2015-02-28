@@ -445,7 +445,7 @@ void eQEP::setEmulationControl(ECB mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_ECB(3)))
       // Then set whichever need to be on again
-      | ((uint16_t)mode << 14));
+      | EQEP_QEPCTL_ECB((uint16_t)mode));
 }
 /**
  * Position Counter Reset Mode enum.
@@ -466,7 +466,7 @@ void eQEP::setPositionCounterResetMode(PCRM mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_PCRM(3)))
       // Then set whichever need to be on again
-      | ((uint16_t)mode << 12));
+      | EQEP_QEPCTL_PCRM((uint16_t)mode));
 }
 /**
  * Strobe event initialization enum.
@@ -498,7 +498,7 @@ void eQEP::setStrobeEventInit(SEI mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_SEI(3)))
       // Then set whichever need to be on again
-      | ((uint16_t)mode << 10));
+      | EQEP_QEPCTL_SEI((uint16_t)mode));
 }
 /**
  * Index Event Initialization of position counter enum
@@ -527,7 +527,7 @@ void eQEP::setIndexEventInit(IEI mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_IEI(3)))
       // Then set whichever need to be on again
-      | ((uint16_t)mode << 8));
+      | EQEP_QEPCTL_IEI((uint16_t)mode));
 }
 /**
  * Software initialization of position counter. Call this function to reset
@@ -595,7 +595,7 @@ void eQEP::setIndexEventPositionLatch(IEL mode) {
     // Ensure both bits are off
     (getControl() & ~(EQEP_QEPCTL_IEL(3)))
       // Then set whichever need to be on again
-      | ((uint16_t)mode << 4));
+      | EQEP_QEPCTL_IEL((uint16_t)mode));  
 }
 /**
  * Quadrature position counter enable/software reset
@@ -715,7 +715,7 @@ void eQEP::enableCaptureUnit() {
 void eQEP::setCaptureTimeClockPrescaler(int value) {
   setCaptureControl(
     (getCaptureControl() & ~EQEP_QCAPCTL_CCPS(7))
-      | (EQEP_QCAPCTL_CCPS(7) & EQEP_QCAPCTL_CCPS(value)));
+      | EQEP_QCAPCTL_CCPS(value));
 }
 /**
  * Unit position event prescaler.
@@ -730,7 +730,7 @@ void eQEP::setCaptureTimeClockPrescaler(int value) {
 void eQEP::setPositionEventPrescaler(int value) {
   setCaptureControl(
     (getCaptureControl() & ~EQEP_QCAPCTL_UPPS(0xF))
-      | (EQEP_QCAPCTL_UPPS(0xF) & EQEP_QCAPCTL_UPPS(value)));
+      | EQEP_QCAPCTL_UPPS(value));
 }
 
 // eQEP Position-Compare Control Register
@@ -798,7 +798,7 @@ void eQEP::enablePositionCompareShadow() {
 void eQEP::setPositionCompareShadowLoadMode(PCLOAD mode) {
   setPositionCompareControl(
     (getPositionCompareControl() & ~EQEP_QPOSCTL_PCLOAD)
-      | ((uint16_t)mode & EQEP_QPOSCTL_PCLOAD));
+      | (((uint16_t)mode << 14) & EQEP_QPOSCTL_PCLOAD));
 }
 /**
  * Polarity of sync output enum
@@ -821,7 +821,7 @@ void eQEP::setPositionCompareShadowLoadMode(PCLOAD mode) {
 void eQEP::setPositionCompareSyncOutput(PCPOL mode) {
   setPositionCompareControl(
     (getPositionCompareControl() & ~EQEP_QPOSCTL_PCPOL)
-      | ((uint16_t)mode & EQEP_QPOSCTL_PCPOL));
+      | (((uint16_t)mode << 13) & EQEP_QPOSCTL_PCPOL));
 }
 /**
  * Enable the Position Compare Unit
@@ -845,7 +845,7 @@ void eQEP::disablePositionCompareUnit() {
 void eQEP::setPositionCompareSyncOutputPulseWidth(uint16_t value) {
   setPositionCompareControl(
     (getPositionCompareControl() & ~EQEP_QPOSCTL_PCSPW(0xFFF))
-      | (EQEP_QPOSCTL_PCSPW(0xFFF) & value));
+      | EQEP_QPOSCTL_PCSPW(value));
 }
 
 // eQEP Interrupt Enable Register
